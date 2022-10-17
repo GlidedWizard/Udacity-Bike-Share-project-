@@ -60,9 +60,12 @@ def get_filters():
         day_num = int(day_num)
         day = days[int(day_num) - 1]
     except:
+        day = day_num.lower().strip()
         pass
 
     print('-' * 40)
+
+
     return city, month, day
 
 

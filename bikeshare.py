@@ -37,22 +37,24 @@ def get_filters():
 
     # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
     while True:
-        global day_num
+
         # By default day will be set to all
         # This is done to avoid variable referenced before assignment error at the return line
+        global days
+        days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'all']
+
         day = 'all'
+        global day_num
         day_num = input(
-            'Which day of the week? please type your response as an integer (Sunday=1) or all to see for all days')
+            'Which day of the week? please type your desired day or ''all'' to see for all days')
         try:
-            if day_num.lower().strip() == 'all' or (float(day_num) == int(day_num) and (0 < int(day_num) < 8)):
+            if day_num.lower().strip() in days or (float(day_num) == int(day_num) and (0 < int(day_num) < 8)):
                 break
                 """this is to make sure no decimal number are entered and then rounded """
         except:
             pass
         print('opps invalid input please try again')
 
-    global days
-    days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 
     try:
         day_num = int(day_num)
@@ -178,6 +180,27 @@ def user_stats(df):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
 
+def display_data(df):
+    start_loc = 0
+    while True:
+        user_input = input('Do you want to see the first 5 rows of raw data? type "yes" or "no" ')
+        if user_input.lower().strip() in ['yes','no']:
+            break
+        else:
+            print('invalid input try again')
+
+    while user_input.lower().strip() == 'yes':
+        if df.iloc[start_loc:start_loc+5].empty:
+            print('That\'s all the data we have!')
+            break
+        print(df.iloc[start_loc:start_loc+5])
+        start_loc += 5
+        while True:
+            user_input = input('Do you want to see 5 more rows of raw data? type "yes" or "no" ')
+            if user_input.lower().strip() in ['yes','no']:
+                break
+            else:
+                print('invalid input try again')
 
 def main():
     while True:
@@ -188,7 +211,7 @@ def main():
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df)
-
+        display_data(df)
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
             break
